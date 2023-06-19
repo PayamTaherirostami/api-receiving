@@ -1,14 +1,20 @@
-// import fetch from 'node-fetch';
-
 const express = require('express');
 const app = express();
-const fetch = require('node-fetch')
-const cors = require('cors');
+const fetch = require('node-fetch');
+var logger = require('morgan');
+var cors = require('cors');
+var bodyParser= require('body-parser');
 
 app.use(cors());
+app.use(logger('dev'));
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static('./public'));
 
-app.get('/', async (req, res)=>{
-    res.send("Welcome to Pamiran")
+app.post('/', async (req, res) => { 
+    const lpn = req.body.lpn
+
+    console.log("lpn:",req.body.lpn);
     const url = 'https://ws.sanmar.com:8080/SanMarWebService/webservices/PackingSlipService?wsdl';
 
     const data = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:pac="http://ws.sanmar.com/webservices/PackingSlip">
@@ -18,11 +24,11 @@ app.get('/', async (req, res)=>{
               <pac:wsVersion>1.0.0</pac:wsVersion>
               <pac:UserId>jetcityproducts</pac:UserId>
               <pac:Password>Annaalisa1</pac:Password>
-              <pac:PackingSlipId>LP0089954082</pac:PackingSlipId>
+              <pac:PackingSlipId>${lpn}</pac:PackingSlipId> 
            </pac:GetPackingSlip>
         </soapenv:Body>
      </soapenv:Envelope>`;
-    
+    //  Another LPN:   R0083568529
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -33,13 +39,20 @@ app.get('/', async (req, res)=>{
     });
     
     const text = await response.text();
+    // console.log("from sanmar:",text);
+    res.send(text)
 
-    console.log("from sanmar:",text);
+});
+
+app.get('/', async (req, res)=>{
+    
+    res.send("welcome...")
    
 })
 
- app.listen(9000, function(){
-    console.log(`Listening on port 9000 ...`);
+const port = process.env.PORT || 9000;
+var server = app.listen(port, function(){
+    console.log(`Listening on port ${port}...`);
 });
 
-
+module.exports = app;
