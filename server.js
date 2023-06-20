@@ -14,7 +14,7 @@ app.use(express.static('./public'));
 app.post('/', async (req, res) => { 
     const lpn = req.body.lpn
 
-    console.log("lpn:",req.body.lpn);
+    // console.log("lpn:",req.body.lpn);
     const url = 'https://ws.sanmar.com:8080/SanMarWebService/webservices/PackingSlipService?wsdl';
 
     const data = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:pac="http://ws.sanmar.com/webservices/PackingSlip">
@@ -33,13 +33,11 @@ app.post('/', async (req, res) => {
         method: 'POST',
         headers: {
             'Content-Type': 'text/xml',
-            // 'Authorization': 'Basic amV0Y2l0eXByb2R1Y3RzOkFubmFhbGlzYTE=',
         },
         body: data,
     });
     
     const text = await response.text();
-    // console.log("from sanmar:",text);
     res.send(text)
 
 });
