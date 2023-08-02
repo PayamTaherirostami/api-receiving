@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const fetch = require('node-fetch');
@@ -12,22 +11,10 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('./public'));
 
-let myData=[
-    {name: "payam",  user:'jetcityproducts',password:'Annaalisa1'},
-    {name: "artem",  user:'',password:''},
-    {name: "payam1", user:'',password:''},
-  ]
 app.post('/', async (req, res) => { 
-
     const lpn = req.body.lpn
-    const username= req.body.user
 
-    let obj1 = myData.find(o=>o.name === username)
-
-    let user= obj1.user
-    let pass= obj1.password
-
-
+    // console.log("lpn:",req.body.lpn);
     const url = 'https://ws.sanmar.com:8080/SanMarWebService/webservices/PackingSlipService?wsdl';
 
     const data = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:pac="http://ws.sanmar.com/webservices/PackingSlip">
@@ -35,8 +22,8 @@ app.post('/', async (req, res) => {
         <soapenv:Body>
            <pac:GetPackingSlip>
               <pac:wsVersion>1.0.0</pac:wsVersion>
-              <pac:UserId>${user}</pac:UserId>
-              <pac:Password>${pass}</pac:Password>
+              <pac:UserId>jetcityproducts</pac:UserId>
+              <pac:Password>Annaalisa1</pac:Password>
               <pac:PackingSlipId>${lpn}</pac:PackingSlipId> 
            </pac:GetPackingSlip>
         </soapenv:Body>
