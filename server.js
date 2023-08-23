@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 var logger = require('morgan');
 var cors = require('cors');
 var bodyParser= require('body-parser');
+require("dotenv").config()
 
 app.use(cors());
 app.use(logger('dev'));
@@ -23,7 +24,7 @@ app.post('/', async (req, res) => {
            <pac:GetPackingSlip>
               <pac:wsVersion>1.0.0</pac:wsVersion>
               <pac:UserId>jetcityproducts</pac:UserId>
-              <pac:Password>Annaalisa1</pac:Password>
+              <pac:Password>${process.env.REACT_APP_RAPID_API_KEY}</pac:Password>
               <pac:PackingSlipId>${lpn}</pac:PackingSlipId> 
            </pac:GetPackingSlip>
         </soapenv:Body>
